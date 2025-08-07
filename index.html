@@ -19,6 +19,55 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
+    .container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    #color-preview {
+      width: 200px;
+      height: 200px;
+      border: 4px solid #fff;
+      border-radius: 12px;
+      transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      position: relative;
+    }
+    #boxSizeContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+    }
+    #boxSize {
+      -webkit-appearance: slider-vertical;
+      writing-mode: bt-lr; /* vertical orientation */
+      width: 8px;
+      height: 200px;
+      margin-bottom: 10px;
+      background: transparent;
+      cursor: pointer;
+    }
+    #boxSizeVal {
+      font-size: 1em;
+      margin-bottom: 10px;
+    }
+    #defaultSizeBtn {
+      padding: 5px 10px;
+      font-size: 0.9em;
+      background-color: #222;
+      border: 1px solid #fff;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+    #defaultSizeBtn:hover {
+      background-color: #444;
+    }
     .slider-group {
       margin: 15px 0;
       font-size: 1.2em;
@@ -41,15 +90,6 @@
       border-radius: 8px;
       display: inline-block;
     }
-    #color-preview {
-      width: 200px;
-      height: 200px;
-      margin: 30px auto 20px;
-      border: 4px solid #fff;
-      border-radius: 12px;
-      transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-    }
     #gtic-logo {
       position: fixed;
       bottom: 20px;
@@ -67,13 +107,13 @@
 
   <h1>RGB Color Selector</h1>
 
-  <div id="color-preview"></div>
-
-  <div class="slider-group">
-    <label>Box Size (px):
+  <div class="container">
+    <div id="color-preview"></div>
+    <div id="boxSizeContainer">
+      <span id="boxSizeVal">200</span>
       <input type="range" id="boxSize" min="50" max="400" value="200" />
-      <span class="value-box" id="boxSizeVal">200</span>
-    </label>
+      <button id="defaultSizeBtn" title="Reset to default size">Default</button>
+    </div>
   </div>
 
   <div class="slider-group">
@@ -113,6 +153,8 @@
     const gInput = document.getElementById("g");
     const bInput = document.getElementById("b");
     const boxSizeInput = document.getElementById("boxSize");
+    const boxSizeVal = document.getElementById("boxSizeVal");
+    const defaultSizeBtn = document.getElementById("defaultSizeBtn");
 
     const rVal9 = document.getElementById("rVal9");
     const gVal9 = document.getElementById("gVal9");
@@ -121,8 +163,6 @@
     const rVal255 = document.getElementById("rVal255");
     const gVal255 = document.getElementById("gVal255");
     const bVal255 = document.getElementById("bVal255");
-
-    const boxSizeVal = document.getElementById("boxSizeVal");
 
     const output = document.getElementById("output");
     const preview = document.getElementById("color-preview");
@@ -161,13 +201,19 @@
       preview.style.height = size + "px";
     }
 
-    [rInput, gInput, bInput].forEach((input) =>
-      input.addEventListener("input", updateRGB)
-    );
-
     boxSizeInput.addEventListener("input", () => {
       updateBoxSize();
     });
+
+    defaultSizeBtn.addEventListener("click", () => {
+      const defaultSize = 200;
+      boxSizeInput.value = defaultSize;
+      updateBoxSize();
+    });
+
+    [rInput, gInput, bInput].forEach((input) =>
+      input.addEventListener("input", updateRGB)
+    );
 
     // Initialize on load
     updateRGB();
