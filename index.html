@@ -19,55 +19,86 @@
       font-size: 2em;
       margin-bottom: 20px;
     }
+
+    /* Settings menu */
+    #settingsToggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #222;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      z-index: 1000;
+    }
+    #settingsPanel {
+      position: fixed;
+      top: 60px;
+      left: 20px;
+      background: #111;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      padding: 15px;
+      width: 220px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      display: none;
+      z-index: 999;
+    }
+    #settingsPanel label {
+      display: flex;
+      flex-direction: column;
+      font-size: 1em;
+      margin-bottom: 15px;
+      color: #eee;
+    }
+    #settingsPanel input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      margin-top: 8px;
+    }
+    #settingsPanel input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+    }
+    #settingsPanel input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+    }
+    #boxSizeValSettings {
+      margin-top: 5px;
+      font-weight: bold;
+      color: #ddd;
+      text-align: right;
+    }
+
+    /* Color preview and layout */
     .container {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 20px;
+      margin-top: 60px;
     }
     #color-preview {
       width: 200px;
       height: 200px;
+      margin: 0 auto 20px;
       border: 4px solid #fff;
       border-radius: 12px;
       transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-      position: relative;
     }
-    #boxSizeContainer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      user-select: none;
-    }
-    #boxSize {
-      -webkit-appearance: slider-vertical;
-      writing-mode: bt-lr; /* vertical orientation */
-      width: 8px;
-      height: 200px;
-      margin-bottom: 10px;
-      background: transparent;
-      cursor: pointer;
-    }
-    #boxSizeVal {
-      font-size: 1em;
-      margin-bottom: 10px;
-    }
-    #defaultSizeBtn {
-      padding: 5px 10px;
-      font-size: 0.9em;
-      background-color: #222;
-      border: 1px solid #fff;
-      color: #fff;
-      border-radius: 6px;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.2s ease;
-    }
-    #defaultSizeBtn:hover {
-      background-color: #444;
-    }
+
     .slider-group {
       margin: 15px 0;
       font-size: 1.2em;
@@ -98,63 +129,75 @@
       height: auto;
       opacity: 0.85;
       user-select: none;
-      pointer-events: none;
       filter: drop-shadow(0 0 3px #000);
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      z-index: 1000;
+    }
+    #gtic-logo:hover {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
 
+  <div id="settingsToggle">Settings ⚙️</div>
+  <div id="settingsPanel">
+    <label for="boxSize">
+      Box Size (px)
+      <input type="range" id="boxSize" min="50" max="400" value="200" />
+      <div id="boxSizeValSettings">200</div>
+    </label>
+  </div>
+
   <h1>RGB Color Selector</h1>
 
   <div class="container">
     <div id="color-preview"></div>
-    <div id="boxSizeContainer">
-      <span id="boxSizeVal">200</span>
-      <input type="range" id="boxSize" min="50" max="400" value="200" />
-      <button id="defaultSizeBtn" title="Reset to default size">Default</button>
+
+    <div class="slider-group">
+      <label>R: 
+        <input type="range" id="r" min="0" max="9" value="0" />
+        <span class="value-box" id="rVal9">0</span> |
+        <span class="value-box" id="rVal255">0</span>
+      </label>
     </div>
-  </div>
 
-  <div class="slider-group">
-    <label>R: 
-      <input type="range" id="r" min="0" max="9" value="0" />
-      <span class="value-box" id="rVal9">0</span> |
-      <span class="value-box" id="rVal255">0</span>
-    </label>
-  </div>
+    <div class="slider-group">
+      <label>G: 
+        <input type="range" id="g" min="0" max="9" value="0" />
+        <span class="value-box" id="gVal9">0</span> |
+        <span class="value-box" id="gVal255">0</span>
+      </label>
+    </div>
 
-  <div class="slider-group">
-    <label>G: 
-      <input type="range" id="g" min="0" max="9" value="0" />
-      <span class="value-box" id="gVal9">0</span> |
-      <span class="value-box" id="gVal255">0</span>
-    </label>
-  </div>
+    <div class="slider-group">
+      <label>B: 
+        <input type="range" id="b" min="0" max="9" value="0" />
+        <span class="value-box" id="bVal9">0</span> |
+        <span class="value-box" id="bVal255">0</span>
+      </label>
+    </div>
 
-  <div class="slider-group">
-    <label>B: 
-      <input type="range" id="b" min="0" max="9" value="0" />
-      <span class="value-box" id="bVal9">0</span> |
-      <span class="value-box" id="bVal255">0</span>
-    </label>
+    <div id="output">RGB(0, 0, 0)</div>
   </div>
-
-  <div id="output">RGB(0, 0, 0)</div>
 
   <img
     id="gtic-logo"
     src="https://cdn.discordapp.com/attachments/1300121957576212565/1403146509729398835/GTIC_Logo2.png?ex=68967d85&is=68952c05&hm=5ef7b6169aaf4ff182bd7020b41dfb081bbe56c6cb6a443b1ceca62065c0d2cd&"
     alt="GTIC Logo"
+    title="Join our Discord"
   />
 
   <script>
+    const settingsToggle = document.getElementById("settingsToggle");
+    const settingsPanel = document.getElementById("settingsPanel");
+    const boxSizeInput = document.getElementById("boxSize");
+    const boxSizeValSettings = document.getElementById("boxSizeValSettings");
+
     const rInput = document.getElementById("r");
     const gInput = document.getElementById("g");
     const bInput = document.getElementById("b");
-    const boxSizeInput = document.getElementById("boxSize");
-    const boxSizeVal = document.getElementById("boxSizeVal");
-    const defaultSizeBtn = document.getElementById("defaultSizeBtn");
 
     const rVal9 = document.getElementById("rVal9");
     const gVal9 = document.getElementById("gVal9");
@@ -166,58 +209,60 @@
 
     const output = document.getElementById("output");
     const preview = document.getElementById("color-preview");
+    const gticLogo = document.getElementById("gtic-logo");
 
+    // Toggle settings panel visibility
+    settingsToggle.addEventListener("click", () => {
+      if (settingsPanel.style.display === "block") {
+        settingsPanel.style.display = "none";
+      } else {
+        settingsPanel.style.display = "block";
+      }
+    });
+
+    // Update box size from settings slider
+    function updateBoxSize() {
+      const size = parseInt(boxSizeInput.value);
+      boxSizeValSettings.textContent = size;
+      preview.style.width = size + "px";
+      preview.style.height = size + "px";
+    }
+
+    // Update RGB colors and output
     function updateRGB() {
       const r = parseInt(rInput.value);
       const g = parseInt(gInput.value);
       const b = parseInt(bInput.value);
 
-      // Scale 0–9 to 0–255
       const r255 = Math.round((r / 9) * 255);
       const g255 = Math.round((g / 9) * 255);
       const b255 = Math.round((b / 9) * 255);
 
-      // Update 0–9 values
       rVal9.textContent = r;
       gVal9.textContent = g;
       bVal9.textContent = b;
 
-      // Update 0–255 values
       rVal255.textContent = r255;
       gVal255.textContent = g255;
       bVal255.textContent = b255;
 
-      // Update preview box background color
       preview.style.backgroundColor = `rgb(${r255}, ${g255}, ${b255})`;
 
-      // Update RGB text output
       output.textContent = `RGB(${r255}, ${g255}, ${b255})`;
     }
 
-    function updateBoxSize() {
-      const size = parseInt(boxSizeInput.value);
-      boxSizeVal.textContent = size;
-      preview.style.width = size + "px";
-      preview.style.height = size + "px";
-    }
+    // Event listeners
+    boxSizeInput.addEventListener("input", updateBoxSize);
+    [rInput, gInput, bInput].forEach((input) => input.addEventListener("input", updateRGB));
 
-    boxSizeInput.addEventListener("input", () => {
-      updateBoxSize();
+    // Click on logo to open Discord link
+    gticLogo.addEventListener("click", () => {
+      window.open("https://discord.gg/hB4V4ywqxj", "_blank");
     });
 
-    defaultSizeBtn.addEventListener("click", () => {
-      const defaultSize = 200;
-      boxSizeInput.value = defaultSize;
-      updateBoxSize();
-    });
-
-    [rInput, gInput, bInput].forEach((input) =>
-      input.addEventListener("input", updateRGB)
-    );
-
-    // Initialize on load
-    updateRGB();
+    // Initialize
     updateBoxSize();
+    updateRGB();
   </script>
 </body>
 </html>
