@@ -43,22 +43,23 @@
       border: 2px solid #fff;
       border-radius: 8px;
       padding: 15px;
-      width: 220px;
+      width: 280px;
       box-shadow: 0 0 20px rgba(255,255,255,0.3);
       display: none;
       z-index: 999;
+      text-align: left;
     }
     #settingsPanel label {
       display: flex;
-      flex-direction: column;
+      align-items: center;
       font-size: 1em;
       margin-bottom: 15px;
       color: #eee;
+      gap: 10px;
     }
     #settingsPanel input[type="range"] {
       -webkit-appearance: none;
-      width: 100%;
-      margin-top: 8px;
+      width: 140px;
       height: 8px;
       border-radius: 4px;
       outline: none;
@@ -91,16 +92,18 @@
       transition: background 0.3s ease;
       box-shadow: 0 0 5px #00aaff;
     }
-    #boxSizeValSettings {
-      margin-top: 5px;
+    .value-box {
+      min-width: 30px;
       font-weight: bold;
       color: #ddd;
-      text-align: right;
+      text-align: center;
+      user-select: none;
     }
 
     /* Color preview and layout */
     .container {
       margin-top: 60px;
+      text-align: center;
     }
     #color-preview {
       width: 200px;
@@ -115,16 +118,44 @@
     .slider-group {
       margin: 15px 0;
       font-size: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
-    input[type="range"] {
+    input[type="range"].rgb-slider {
       width: 300px;
+      height: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      background: linear-gradient(to right, #00aaff 0%, #00aaff 50%, #444 50%, #444 100%);
+      transition: background 0.3s ease;
+      outline: none;
     }
-    .value-box {
-      display: inline-block;
-      min-width: 50px;
-      font-size: 1em;
-      margin-left: 10px;
+    input[type="range"].rgb-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #00aaff;
+      border-radius: 4px;
+      border: none;
+      margin-top: -6px;
+      cursor: pointer;
+      box-shadow: 0 0 5px #00aaff;
+      transition: background 0.3s ease;
     }
+    input[type="range"].rgb-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #00aaff;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 5px #00aaff;
+      transition: background 0.3s ease;
+    }
+
     #output {
       margin-top: 25px;
       font-size: 1.5em;
@@ -157,9 +188,10 @@
   <div id="settingsToggle">Settings ⚙️</div>
   <div id="settingsPanel">
     <label for="boxSize">
-      Box Size (px)
+      Box Size:
       <input type="range" id="boxSize" min="50" max="400" value="200" />
-      <div id="boxSizeValSettings">200</div>
+      <span class="value-box" id="boxSizeVal">200</span>
+      <span class="value-box">| 400</span>
     </label>
   </div>
 
@@ -169,27 +201,30 @@
     <div id="color-preview"></div>
 
     <div class="slider-group">
-      <label>R: 
-        <input type="range" id="r" min="0" max="9" value="0" />
-        <span class="value-box" id="rVal9">0</span> |
-        <span class="value-box" id="rVal255">0</span>
+      <label for="r">R:
+        <input class="rgb-slider" type="range" id="r" min="0" max="9" value="0" />
       </label>
+      <span class="value-box" id="rVal9">0</span>
+      <span class="value-box">|</span>
+      <span class="value-box" id="rVal255">0</span>
     </div>
 
     <div class="slider-group">
-      <label>G: 
-        <input type="range" id="g" min="0" max="9" value="0" />
-        <span class="value-box" id="gVal9">0</span> |
-        <span class="value-box" id="gVal255">0</span>
+      <label for="g">G:
+        <input class="rgb-slider" type="range" id="g" min="0" max="9" value="0" />
       </label>
+      <span class="value-box" id="gVal9">0</span>
+      <span class="value-box">|</span>
+      <span class="value-box" id="gVal255">0</span>
     </div>
 
     <div class="slider-group">
-      <label>B: 
-        <input type="range" id="b" min="0" max="9" value="0" />
-        <span class="value-box" id="bVal9">0</span> |
-        <span class="value-box" id="bVal255">0</span>
+      <label for="b">B:
+        <input class="rgb-slider" type="range" id="b" min="0" max="9" value="0" />
       </label>
+      <span class="value-box" id="bVal9">0</span>
+      <span class="value-box">|</span>
+      <span class="value-box" id="bVal255">0</span>
     </div>
 
     <div id="output">RGB(0, 0, 0)</div>
@@ -206,7 +241,7 @@
     const settingsToggle = document.getElementById("settingsToggle");
     const settingsPanel = document.getElementById("settingsPanel");
     const boxSizeInput = document.getElementById("boxSize");
-    const boxSizeValSettings = document.getElementById("boxSizeValSettings");
+    const boxSizeVal = document.getElementById("boxSizeVal");
 
     const rInput = document.getElementById("r");
     const gInput = document.getElementById("g");
@@ -236,7 +271,7 @@
     // Update box size from settings slider
     function updateBoxSize() {
       const size = parseInt(boxSizeInput.value);
-      boxSizeValSettings.textContent = size;
+      boxSizeVal.textContent = size;
       preview.style.width = size + "px";
       preview.style.height = size + "px";
 
