@@ -42,10 +42,17 @@
     }
     .value-box {
       display: inline-block;
-      min-width: 50px;
+      min-width: 30px;
       font-size: 1em;
-      margin-left: 10px;
+      margin-left: 5px;
       vertical-align: middle;
+      font-family: monospace;
+    }
+    .value-group {
+      display: inline-flex;
+      gap: 8px;
+      vertical-align: middle;
+      margin-left: 10px;
     }
     #output {
       margin-top: 25px;
@@ -103,23 +110,30 @@
       border: 2px solid #fff;
       padding: 20px;
       border-radius: 12px;
-      width: 260px;
+      width: 280px;
       display: none;
       z-index: 9999;
       box-shadow: 0 0 10px #fff;
       user-select: none;
+      box-sizing: border-box;
     }
     #settings-menu label {
       display: block;
       margin-bottom: 15px;
       font-size: 1.1em;
+      user-select: none;
+    }
+    #boxSize {
+      width: 100% !important;
+      margin-top: 8px;
+      margin-bottom: 8px;
     }
     #boxSizeVal {
       font-weight: bold;
       display: inline-block;
-      margin-left: 8px;
       min-width: 30px;
       text-align: right;
+      user-select: none;
     }
     #defaultSizeBtn {
       padding: 6px 12px;
@@ -131,6 +145,7 @@
       cursor: pointer;
       user-select: none;
       transition: background-color 0.2s ease;
+      width: 100%;
     }
     #defaultSizeBtn:hover {
       background-color: #444;
@@ -157,24 +172,33 @@
   <div class="slider-group">
     <label for="r">R: 
       <input type="range" id="r" min="0" max="9" value="0" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0" aria-label="Red value" />
-      <span class="value-box" id="rVal9">0</span> |
-      <span class="value-box" id="rVal255">0</span>
+      <span class="value-group">
+        <span class="value-box" id="rVal9">0</span>
+        <span class="value-box">|</span>
+        <span class="value-box" id="rVal255">0</span>
+      </span>
     </label>
   </div>
 
   <div class="slider-group">
     <label for="g">G: 
       <input type="range" id="g" min="0" max="9" value="0" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0" aria-label="Green value" />
-      <span class="value-box" id="gVal9">0</span> |
-      <span class="value-box" id="gVal255">0</span>
+      <span class="value-group">
+        <span class="value-box" id="gVal9">0</span>
+        <span class="value-box">|</span>
+        <span class="value-box" id="gVal255">0</span>
+      </span>
     </label>
   </div>
 
   <div class="slider-group">
     <label for="b">B: 
       <input type="range" id="b" min="0" max="9" value="0" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0" aria-label="Blue value" />
-      <span class="value-box" id="bVal9">0</span> |
-      <span class="value-box" id="bVal255">0</span>
+      <span class="value-group">
+        <span class="value-box" id="bVal9">0</span>
+        <span class="value-box">|</span>
+        <span class="value-box" id="bVal255">0</span>
+      </span>
     </label>
   </div>
 
