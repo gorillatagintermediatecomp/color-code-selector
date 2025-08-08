@@ -4,9 +4,24 @@
   <meta charset="UTF-8" />
   <title>Color Code Selector</title>
   <style>
+    :root {
+      --blue: #00aaff;
+      --gray-dark: #111;
+      --gray-medium: #444;
+      --gray-light: #eee;
+      --text-light: #fff;
+      --text-dark: #222;
+      --bg-dark: #000;
+      --bg-light: #f0f0f0;
+      --border-dark: #fff;
+      --border-light: #333;
+      --shadow-dark: rgba(255, 255, 255, 0.3);
+      --shadow-light: rgba(0, 0, 0, 0.2);
+    }
+
     body {
-      background-color: #000;
-      color: #fff;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 40px;
@@ -14,6 +29,7 @@
       min-height: 100vh;
       margin: 0;
       overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     h1 {
       font-size: 2em;
@@ -25,35 +41,38 @@
       position: fixed;
       top: 20px;
       left: 20px;
-      background: #222;
-      color: #fff;
+      background: var(--gray-medium);
+      color: var(--text-light);
       padding: 10px 15px;
       border-radius: 8px;
       cursor: pointer;
       user-select: none;
       font-weight: bold;
-      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      box-shadow: 0 0 10px var(--shadow-dark);
       z-index: 1000;
+      transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     }
     #settingsPanel {
       position: fixed;
       top: 60px;
       left: 20px;
-      background: #111;
-      border: 2px solid #fff;
+      background: var(--gray-dark);
+      border: 2px solid var(--border-dark);
       border-radius: 8px;
       padding: 15px;
       width: 220px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      box-shadow: 0 0 20px var(--shadow-dark);
       display: none;
       z-index: 999;
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
     #settingsPanel label {
       display: flex;
       flex-direction: column;
       font-size: 1em;
       margin-bottom: 15px;
-      color: #eee;
+      color: var(--gray-light);
+      transition: color 0.3s ease;
     }
     #settingsPanel input[type="range"] {
       -webkit-appearance: none;
@@ -63,7 +82,7 @@
       border-radius: 4px;
       outline: none;
       cursor: pointer;
-      background: linear-gradient(to right, #00aaff 0%, #00aaff 50%, #444 50%, #444 100%);
+      background: linear-gradient(to right, var(--blue) 0%, var(--blue) 50%, var(--gray-medium) 50%, var(--gray-medium) 100%);
       transition: background 0.3s ease;
     }
     /* Chrome, Safari, Edge slider thumb */
@@ -72,48 +91,92 @@
       appearance: none;
       width: 20px;
       height: 20px;
-      background: #00aaff;
+      background: var(--blue);
       cursor: pointer;
       border-radius: 4px; /* box shape */
       border: none;
       margin-top: -6px; /* center thumb vertically */
-      transition: background 0.3s ease;
-      box-shadow: 0 0 5px #00aaff;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 5px var(--blue);
     }
     /* Firefox slider thumb */
     #settingsPanel input[type="range"]::-moz-range-thumb {
       width: 20px;
       height: 20px;
-      background: #00aaff;
+      background: var(--blue);
       cursor: pointer;
       border-radius: 4px;
       border: none;
-      transition: background 0.3s ease;
-      box-shadow: 0 0 5px #00aaff;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 5px var(--blue);
     }
     #boxSizeValSettings {
       margin-top: 5px;
       font-weight: bold;
-      color: #ddd;
+      color: var(--gray-light);
       text-align: right;
+      transition: color 0.3s ease;
     }
 
-    /* Default button styling */
+    /* Default button styling with tighter margin */
     #defaultBoxSizeBtn {
-      margin-top: 10px;
+      margin-top: 6px;
       padding: 8px 12px;
-      background-color: #00aaff;
+      background-color: var(--blue);
       border: none;
       border-radius: 6px;
       color: white;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 0 8px #00aaff;
+      box-shadow: 0 0 8px var(--blue);
       transition: background-color 0.3s ease;
       user-select: none;
     }
     #defaultBoxSizeBtn:hover {
       background-color: #0088cc;
+    }
+
+    /* Appearance toggle label and input */
+    #appearanceToggleLabel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1em;
+      margin-top: 20px;
+      color: var(--gray-light);
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+    #appearanceToggle {
+      width: 40px;
+      height: 20px;
+      position: relative;
+      -webkit-appearance: none;
+      background: var(--gray-medium);
+      outline: none;
+      border-radius: 20px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #appearanceToggle:checked {
+      background: var(--blue);
+    }
+    #appearanceToggle::before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 16px;
+      background: white;
+      transition: 0.3s;
+      box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    }
+    #appearanceToggle:checked::before {
+      left: 22px;
     }
 
     /* Color preview and layout */
@@ -124,10 +187,10 @@
       width: 200px;
       height: 200px;
       margin: 0 auto 20px;
-      border: 4px solid #fff;
+      border: 4px solid var(--border-dark);
       border-radius: 12px;
-      transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+      box-shadow: 0 0 15px var(--shadow-dark);
     }
 
     .slider-group {
@@ -141,7 +204,7 @@
       border-radius: 4px;
       outline: none;
       cursor: pointer;
-      background: linear-gradient(to right, #00aaff 0%, #00aaff 0%, #444 0%, #444 100%);
+      background: linear-gradient(to right, var(--blue) 0%, var(--blue) 0%, var(--gray-medium) 0%, var(--gray-medium) 100%);
       transition: background 0.3s ease;
     }
     /* Chrome, Safari, Edge slider thumb */
@@ -150,39 +213,43 @@
       appearance: none;
       width: 20px;
       height: 20px;
-      background: #00aaff;
+      background: var(--blue);
       cursor: pointer;
       border-radius: 4px; /* box shape */
       border: none;
       margin-top: -6px; /* center thumb vertically */
-      transition: background 0.3s ease;
-      box-shadow: 0 0 5px #00aaff;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 5px var(--blue);
     }
     /* Firefox slider thumb */
     input[type="range"]::-moz-range-thumb {
       width: 20px;
       height: 20px;
-      background: #00aaff;
+      background: var(--blue);
       cursor: pointer;
       border-radius: 4px;
       border: none;
-      transition: background 0.3s ease;
-      box-shadow: 0 0 5px #00aaff;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 5px var(--blue);
     }
     .value-box {
       display: inline-block;
       min-width: 50px;
       font-size: 1em;
       margin-left: 10px;
+      color: var(--text-light);
+      transition: color 0.3s ease;
     }
     #output {
       margin-top: 25px;
       font-size: 1.5em;
       font-weight: bold;
-      background-color: #222;
+      background-color: var(--gray-dark);
       padding: 10px;
       border-radius: 8px;
       display: inline-block;
+      transition: background-color 0.3s ease;
+      color: var(--text-light);
     }
     #gtic-logo {
       position: fixed;
@@ -200,6 +267,57 @@
     #gtic-logo:hover {
       opacity: 1;
     }
+
+    /* Light mode overrides */
+    body.light-mode {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+    body.light-mode h1 {
+      color: var(--text-dark);
+    }
+    body.light-mode #settingsToggle {
+      background: var(--gray-light);
+      color: var(--text-dark);
+      box-shadow: 0 0 10px var(--shadow-light);
+    }
+    body.light-mode #settingsPanel {
+      background: #ddd;
+      border-color: var(--border-light);
+      box-shadow: 0 0 20px var(--shadow-light);
+    }
+    body.light-mode #settingsPanel label,
+    body.light-mode #boxSizeValSettings,
+    body.light-mode #appearanceToggleLabel {
+      color: var(--text-dark);
+    }
+    body.light-mode #defaultBoxSizeBtn {
+      background-color: var(--blue);
+      color: white;
+      box-shadow: 0 0 8px var(--blue);
+    }
+    body.light-mode #defaultBoxSizeBtn:hover {
+      background-color: #0088cc;
+    }
+    body.light-mode #color-preview {
+      border-color: var(--border-light);
+      box-shadow: 0 0 15px var(--shadow-light);
+    }
+    body.light-mode input[type="range"] {
+      background: linear-gradient(to right, var(--blue) 0%, var(--blue) 0%, var(--gray-light) 0%, var(--gray-light) 100%);
+    }
+    body.light-mode input[type="range"]::-webkit-slider-thumb,
+    body.light-mode input[type="range"]::-moz-range-thumb {
+      box-shadow: 0 0 5px var(--blue);
+    }
+    body.light-mode .value-box {
+      color: var(--text-dark);
+    }
+    body.light-mode #output {
+      background-color: #ccc;
+      color: var(--text-dark);
+    }
+
   </style>
 </head>
 <body>
@@ -212,6 +330,11 @@
       <div id="boxSizeValSettings">200</div>
     </label>
     <button id="defaultBoxSizeBtn">Default</button>
+
+    <label id="appearanceToggleLabel" for="appearanceToggle">
+      Appearance
+      <input type="checkbox" id="appearanceToggle" />
+    </label>
   </div>
 
   <h1>RGB Color Selector</h1>
@@ -259,6 +382,7 @@
     const boxSizeInput = document.getElementById("boxSize");
     const boxSizeValSettings = document.getElementById("boxSizeValSettings");
     const defaultBoxSizeBtn = document.getElementById("defaultBoxSizeBtn");
+    const appearanceToggle = document.getElementById("appearanceToggle");
 
     const rInput = document.getElementById("r");
     const gInput = document.getElementById("g");
@@ -294,7 +418,7 @@
 
       // Update slider background gradient to show fill
       const percent = ((size - 50) / (400 - 50)) * 100;
-      boxSizeInput.style.background = `linear-gradient(to right, #00aaff 0%, #00aaff ${percent}%, #444 ${percent}%, #444 100%)`;
+      boxSizeInput.style.background = `linear-gradient(to right, var(--blue) 0%, var(--blue) ${percent}%, var(--gray-medium) ${percent}%, var(--gray-medium) 100%)`;
     }
 
     // Reset box size to default 200px
@@ -309,7 +433,7 @@
       const max = parseInt(slider.max);
       const val = parseInt(slider.value);
       const percent = ((val - min) / (max - min)) * 100;
-      slider.style.background = `linear-gradient(to right, #00aaff 0%, #00aaff ${percent}%, #444 ${percent}%, #444 100%)`;
+      slider.style.background = `linear-gradient(to right, var(--blue) 0%, var(--blue) ${percent}%, var(--gray-medium) ${percent}%, var(--gray-medium) 100%)`;
     }
 
     // Update RGB colors and output
@@ -350,8 +474,4 @@
 
     // Click on logo to open Discord link
     gticLogo.addEventListener("click", () => {
-      window.open("https://discord.gg/hB4V4ywqxj", "_blank");
-    });
-  </script>
-</body>
-</html>
+      window.open("https://discord.gg/h
