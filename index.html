@@ -261,6 +261,33 @@
     #gtic-logo:hover {
       opacity: 1;
     }
+
+    /* Made By message bottom left */
+    #madeBy {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      font-size: 0.9em;
+      color: #aaa;
+      user-select: none;
+      font-weight: normal;
+      z-index: 1000;
+      transition: color 0.4s ease;
+    }
+    body.light #madeBy {
+      color: #444;
+    }
+    #madeBy a {
+      color: #00aaff;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    #madeBy a:hover {
+      color: #0088cc;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -319,6 +346,10 @@
     alt="GTIC Logo"
     title="Join our Discord"
   />
+
+  <div id="madeBy">
+    Made By <a href="https://discord.com/users/1252981295454224390" target="_blank" rel="noopener noreferrer">katislunatic</a>
+  </div>
 
   <script>
     const settingsToggle = document.getElementById("settingsToggle");
