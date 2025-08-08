@@ -1,224 +1,454 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Color Selector</title>
-<style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #222;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  h1 {
-    margin: 20px;
-  }
-  #colorBox {
-    margin-top: 10px;
-    width: 200px;
-    height: 200px;
-    background: rgb(0,0,0);
-    border: 2px solid white;
-  }
-  .slider-container {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-  }
-  .slider-container input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    height: 8px;
-    width: 150px;
-    margin-left: 10px;
-    border-radius: 4px;
-    background: #444;
-    outline: none;
-  }
-  .slider-container span {
-    margin-left: 10px;
-    width: 40px;
-    text-align: center;
-  }
-  /* Slider thumbs */
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    border: none;
-  }
-  #rSlider::-webkit-slider-thumb { background: red; }
-  #gSlider::-webkit-slider-thumb { background: green; }
-  #bSlider::-webkit-slider-thumb { background: blue; }
-  #sizeSlider::-webkit-slider-thumb { background: #00aaff; }
-  /* Settings button */
-  #settingsButton {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
-    background: #333;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-  #settingsButton:hover {
-    transform: scale(1.1);
-  }
-  /* Settings panel */
-  #settingsPanel {
-    position: absolute;
-    top: 50px;
-    left: 10px;
-    background: #333;
-    padding: 10px;
-    border-radius: 8px;
-    display: none;
-    width: 200px;
-  }
-  #settingsPanel h3 {
-    margin: 5px 0;
-  }
-  #defaultButton {
-    margin-top: 5px;
-    padding: 5px;
-    width: 100%;
-    border: none;
-    background: #00aaff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  /* Bottom right GTIC logo */
-  #gticLogo {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 80px;
-    transition: transform 0.2s ease;
-    cursor: pointer;
-  }
-  #gticLogo:hover {
-    transform: scale(1.1);
-  }
-  /* Bottom left made by */
-  #madeBy {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    font-size: 14px;
-  }
-  #madeBy a {
-    color: #00aaff;
-    text-decoration: none;
-    transition: transform 0.2s ease;
-    display: inline-block;
-  }
-  #madeBy a:hover {
-    transform: scale(1.1);
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>Color Code Selector</title>
+  <style>
+    /* Base styles for light and dark themes */
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      position: relative;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    body.light {
+      background-color: #f5f5f5;
+      color: #111;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    /* Settings menu */
+    #settingsToggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #222;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      z-index: 1000;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    #settingsToggle.light {
+      background: #ddd;
+      color: #222;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    #settingsPanel {
+      position: fixed;
+      top: 60px;
+      left: 20px;
+      background: #111;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      padding: 15px;
+      width: 220px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      display: none;
+      z-index: 999;
+      transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+      color: #eee;
+    }
+    #settingsPanel.light {
+      background: #fff;
+      border-color: #222;
+      color: #222;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    #settingsPanel label {
+      display: flex;
+      flex-direction: column;
+      font-size: 1em;
+      margin-bottom: 15px;
+    }
+    #settingsPanel.light label {
+      color: #222;
+    }
+    #settingsPanel input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      margin-top: 8px;
+      height: 8px;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+      background: linear-gradient(to right, #00aaff 0%, #00aaff 50%, #444 50%, #444 100%);
+      transition: background 0.3s ease;
+    }
+    #settingsPanel.light input[type="range"] {
+      background: linear-gradient(to right, #00aaff 0%, #00aaff 50%, #bbb 50%, #bbb 100%);
+    }
+    /* Chrome, Safari, Edge slider thumb */
+    #settingsPanel input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #00aaff;
+      cursor: pointer;
+      border-radius: 4px; /* box shape */
+      border: none;
+      margin-top: -6px; /* center thumb vertically */
+      transition: background 0.3s ease;
+      box-shadow: 0 0 5px #00aaff;
+    }
+    /* Firefox slider thumb */
+    #settingsPanel input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #00aaff;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      transition: background 0.3s ease;
+      box-shadow: 0 0 5px #00aaff;
+    }
+    #boxSizeValSettings {
+      margin-top: 5px;
+      font-weight: bold;
+      color: #ddd;
+      text-align: right;
+    }
+    #settingsPanel.light #boxSizeValSettings {
+      color: #444;
+    }
+
+    /* Default button styling */
+    #defaultBoxSizeBtn {
+      margin-top: 6px; /* closer than before */
+      padding: 8px 12px;
+      background-color: #00aaff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 8px #00aaff;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    #defaultBoxSizeBtn:hover {
+      background-color: #0088cc;
+    }
+    #settingsPanel.light #defaultBoxSizeBtn {
+      color: #fff;
+      background-color: #0077cc;
+      box-shadow: 0 0 8px #0077cc;
+    }
+    #settingsPanel.light #defaultBoxSizeBtn:hover {
+      background-color: #005fa3;
+    }
+
+    /* Appearance radio buttons container */
+    #appearanceSettings {
+      margin-top: 20px;
+      text-align: left;
+    }
+    #appearanceSettings label {
+      font-weight: normal;
+      font-size: 1em;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    #appearanceSettings input[type="radio"] {
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    /* Color preview and layout */
+    .container {
+      margin-top: 60px;
+    }
+    #color-preview {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 20px;
+      border: 4px solid #fff;
+      border-radius: 12px;
+      transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease, border-color 0.4s ease;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+    body.light #color-preview {
+      border-color: #222;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .slider-group {
+      margin: 15px 0;
+      font-size: 1.2em;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 300px;
+      height: 8px;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+      background: linear-gradient(to right, #00aaff 0%, #00aaff 0%, #444 0%, #444 100%);
+      transition: background 0.3s ease;
+    }
+    /* Chrome, Safari, Edge slider thumb */
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #00aaff;
+      cursor: pointer;
+      border-radius: 4px; /* box shape */
+      border: none;
+      margin-top: -6px; /* center thumb vertically */
+      transition: background 0.3s ease;
+      box-shadow: 0 0 5px #00aaff;
+    }
+    /* Firefox slider thumb */
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #00aaff;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      transition: background 0.3s ease;
+      box-shadow: 0 0 5px #00aaff;
+    }
+    .value-box {
+      display: inline-block;
+      min-width: 50px;
+      font-size: 1em;
+      margin-left: 10px;
+    }
+    #output {
+      margin-top: 25px;
+      font-size: 1.5em;
+      font-weight: bold;
+      background-color: #222;
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    body.light #output {
+      background-color: #ddd;
+      color: #111;
+    }
+    #gtic-logo {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      height: auto;
+      opacity: 0.85;
+      user-select: none;
+      filter: drop-shadow(0 0 3px #000);
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      z-index: 1000;
+    }
+    #gtic-logo:hover {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
-  <div id="settingsButton">⚙</div>
+
+  <div id="settingsToggle">Settings ⚙️</div>
   <div id="settingsPanel">
-    <h3>Box Size</h3>
-    <input type="range" id="sizeSlider" min="50" max="400" value="200">
-    <button id="defaultButton">Default</button>
-    <h3>Appearance</h3>
-    <button id="lightMode">Light Mode</button>
-    <button id="darkMode" style="margin-top:5px;">Dark Mode</button>
+    <label for="boxSize">
+      Box Size (px)
+      <input type="range" id="boxSize" min="50" max="400" value="200" />
+      <div id="boxSizeValSettings">200</div>
+    </label>
+    <button id="defaultBoxSizeBtn">Default</button>
+
+    <div id="appearanceSettings">
+      <strong>Appearance</strong>
+      <label><input type="radio" name="theme" value="dark" checked /> Dark Mode</label>
+      <label><input type="radio" name="theme" value="light" /> Light Mode</label>
+    </div>
   </div>
 
-  <h1>Color Selector</h1>
-  <div id="colorBox"></div>
+  <h1>RGB Color Selector</h1>
 
-  <div class="slider-container">
-    <label>R</label>
-    <input type="range" id="rSlider" min="0" max="255" value="0">
-    <span id="rValue">0</span>
+  <div class="container">
+    <div id="color-preview"></div>
+
+    <div class="slider-group">
+      <label>R: 
+        <input type="range" id="r" min="0" max="9" value="0" />
+        <span class="value-box" id="rVal9">0</span> |
+        <span class="value-box" id="rVal255">0</span>
+      </label>
+    </div>
+
+    <div class="slider-group">
+      <label>G: 
+        <input type="range" id="g" min="0" max="9" value="0" />
+        <span class="value-box" id="gVal9">0</span> |
+        <span class="value-box" id="gVal255">0</span>
+      </label>
+    </div>
+
+    <div class="slider-group">
+      <label>B: 
+        <input type="range" id="b" min="0" max="9" value="0" />
+        <span class="value-box" id="bVal9">0</span> |
+        <span class="value-box" id="bVal255">0</span>
+      </label>
+    </div>
+
+    <div id="output">RGB(0, 0, 0)</div>
   </div>
-  <div class="slider-container">
-    <label>G</label>
-    <input type="range" id="gSlider" min="0" max="255" value="0">
-    <span id="gValue">0</span>
-  </div>
-  <div class="slider-container">
-    <label>B</label>
-    <input type="range" id="bSlider" min="0" max="255" value="0">
-    <span id="bValue">0</span>
-  </div>
 
-  <a href="https://discord.gg/hB4V4ywqxj" target="_blank">
-    <img id="gticLogo" src="https://cdn.discordapp.com/attachments/1300121957576212565/1403146509729398835/GTIC_Logo2.png?ex=68967d85&is=68952c05&hm=5ef7b6169aaf4ff182bd7020b41dfb081bbe56c6cb6a443b1ceca62065c0d2cd&" alt="GTIC Logo">
-  </a>
+  <img
+    id="gtic-logo"
+    src="https://cdn.discordapp.com/attachments/1300121957576212565/1403146509729398835/GTIC_Logo2.png?ex=68967d85&is=68952c05&hm=5ef7b6169aaf4ff182bd7020b41dfb081bbe56c6cb6a443b1ceca62065c0d2cd&"
+    alt="GTIC Logo"
+    title="Join our Discord"
+  />
 
-  <div id="madeBy">Made By <a href="https://discord.com/users/1252981295454224390" target="_blank">katislunatic</a></div>
+  <script>
+    const settingsToggle = document.getElementById("settingsToggle");
+    const settingsPanel = document.getElementById("settingsPanel");
+    const boxSizeInput = document.getElementById("boxSize");
+    const boxSizeValSettings = document.getElementById("boxSizeValSettings");
+    const defaultBoxSizeBtn = document.getElementById("defaultBoxSizeBtn");
+    const appearanceSettings = document.getElementById("appearanceSettings");
+    const gticLogo = document.getElementById("gtic-logo");
 
-<script>
-const rSlider = document.getElementById('rSlider');
-const gSlider = document.getElementById('gSlider');
-const bSlider = document.getElementById('bSlider');
-const rValue = document.getElementById('rValue');
-const gValue = document.getElementById('gValue');
-const bValue = document.getElementById('bValue');
-const colorBox = document.getElementById('colorBox');
-const sizeSlider = document.getElementById('sizeSlider');
-const defaultButton = document.getElementById('defaultButton');
-const settingsButton = document.getElementById('settingsButton');
-const settingsPanel = document.getElementById('settingsPanel');
-const lightMode = document.getElementById('lightMode');
-const darkMode = document.getElementById('darkMode');
+    const rInput = document.getElementById("r");
+    const gInput = document.getElementById("g");
+    const bInput = document.getElementById("b");
 
-function updateColor() {
-  const r = rSlider.value;
-  const g = gSlider.value;
-  const b = bSlider.value;
-  rValue.textContent = r;
-  gValue.textContent = g;
-  bValue.textContent = b;
-  colorBox.style.background = `rgb(${r},${g},${b})`;
-}
-function updateSize() {
-  colorBox.style.width = `${sizeSlider.value}px`;
-  colorBox.style.height = `${sizeSlider.value}px`;
-}
-function setDefaultSize() {
-  sizeSlider.value = 200;
-  updateSize();
-}
-function toggleSettings() {
-  settingsPanel.style.display = settingsPanel.style.display === 'block' ? 'none' : 'block';
-}
-function setLightMode() {
-  document.body.style.background = '#eee';
-  document.body.style.color = '#000';
-  colorBox.style.border = '2px solid black';
-}
-function setDarkMode() {
-  document.body.style.background = '#222';
-  document.body.style.color = '#fff';
-  colorBox.style.border = '2px solid white';
-}
+    const rVal9 = document.getElementById("rVal9");
+    const gVal9 = document.getElementById("gVal9");
+    const bVal9 = document.getElementById("bVal9");
 
-[rSlider, gSlider, bSlider].forEach(slider => {
-  slider.addEventListener('input', updateColor);
-});
-sizeSlider.addEventListener('input', updateSize);
-defaultButton.addEventListener('click', setDefaultSize);
-settingsButton.addEventListener('click', toggleSettings);
-lightMode.addEventListener('click', setLightMode);
-darkMode.addEventListener('click', setDarkMode);
+    const rVal255 = document.getElementById("rVal255");
+    const gVal255 = document.getElementById("gVal255");
+    const bVal255 = document.getElementById("bVal255");
 
-updateColor();
-updateSize();
-</script>
+    const output = document.getElementById("output");
+    const preview = document.getElementById("color-preview");
+
+    // Toggle settings panel visibility
+    settingsToggle.addEventListener("click", () => {
+      if (settingsPanel.style.display === "block") {
+        settingsPanel.style.display = "none";
+      } else {
+        settingsPanel.style.display = "block";
+      }
+    });
+
+    // Update box size from settings slider
+    function updateBoxSize() {
+      const size = parseInt(boxSizeInput.value);
+      boxSizeValSettings.textContent = size;
+      preview.style.width = size + "px";
+      preview.style.height = size + "px";
+
+      // Update slider background gradient to show fill
+      const percent = ((size - 50) / (400 - 50)) * 100;
+      boxSizeInput.style.background = `linear-gradient(to right, #00aaff 0%, #00aaff ${percent}%, #444 ${percent}%, #444 100%)`;
+    }
+
+    // Reset box size to default 200px
+    defaultBoxSizeBtn.addEventListener("click", () => {
+      boxSizeInput.value = 200;
+      updateBoxSize();
+    });
+
+    // Update background fill for any slider with blue fill
+    function updateSliderFill(slider) {
+      const min = parseInt(slider.min);
+      const max = parseInt(slider.max);
+      const val = parseInt(slider.value);
+      const percent = ((val - min) / (max - min)) * 100;
+      const lightMode = document.body.classList.contains("light");
+      const fillColor = "#00aaff";
+      const emptyColor = lightMode ? "#bbb" : "#444";
+      slider.style.background = `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${percent}%, ${emptyColor} ${percent}%, ${emptyColor} 100%)`;
+    }
+
+    // Update RGB colors and output
+    function updateRGB() {
+      const r = parseInt(rInput.value);
+      const g = parseInt(gInput.value);
+      const b = parseInt(bInput.value);
+
+      const r255 = Math.round((r / 9) * 255);
+      const g255 = Math.round((g / 9) * 255);
+      const b255 = Math.round((b / 9) * 255);
+
+      rVal9.textContent = r;
+      gVal9.textContent = g;
+      bVal9.textContent = b;
+
+      rVal255.textContent = r255;
+      gVal255.textContent = g255;
+      bVal255.textContent = b255;
+
+      preview.style.backgroundColor = `rgb(${r255}, ${g255}, ${b255})`;
+
+      output.textContent = `RGB(${r255}, ${g255}, ${b255})`;
+
+      // Update slider fills
+      updateSliderFill(rInput);
+      updateSliderFill(gInput);
+      updateSliderFill(bInput);
+    }
+
+    // Theme toggle function
+    function setTheme(theme) {
+      if (theme === "light") {
+        document.body.classList.add("light");
+        settingsPanel.classList.add("light");
+        settingsToggle.classList.add("light");
+      } else {
+        document.body.classList.remove("light");
+        settingsPanel.classList.remove("light");
+        settingsToggle.classList.remove("light");
+      }
+      // Update all slider fills for theme colors
+      updateBoxSize();
+      updateSliderFill(rInput);
+      updateSliderFill(gInput);
+      updateSliderFill(bInput);
+    }
+
+    // Event listeners
+    boxSizeInput.addEventListener("input", updateBoxSize);
+    [rInput, gInput, bInput].forEach((input) => input.addEventListener("input", updateRGB));
+
+    // Appearance radio buttons listener
+    appearanceSettings.querySelectorAll('input[name="theme"]').forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        setTheme(e.target.value);
+      });
+    });
+
+    // Initialize slider fills and theme on page load
+    updateBoxSize();
+    updateRGB();
+    setTheme("dark");
+
+    // Click on logo to open Discord link
+    gticLogo.addEventListener("click", () => {
+      window.open("https://discord.gg/hB4V4ywqxj", "_blank");
+    });
+  </script>
 </body>
 </html>
