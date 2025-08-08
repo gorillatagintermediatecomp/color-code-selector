@@ -152,29 +152,21 @@
       background-color: #005fa3;
     }
 
-    /* Appearance toggle switch container */
+    /* Appearance switch container */
     #appearanceSettings {
       margin-top: 20px;
       text-align: left;
-      font-weight: normal;
-      font-size: 1em;
       user-select: none;
     }
-    #appearanceSettings label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
+    #appearanceSettings strong {
+      display: block;
+      margin-bottom: 10px;
     }
-    #appearanceSettings span {
-      margin-left: 10px;
-    }
-
-    /* Toggle switch styles */
     .switch {
       position: relative;
       display: inline-block;
       width: 50px;
-      height: 24px;
+      height: 26px;
     }
     .switch input {
       opacity: 0;
@@ -184,33 +176,27 @@
     .sliderSwitch {
       position: absolute;
       cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background-color: #444;
       transition: 0.4s;
-      border-radius: 24px;
+      border-radius: 26px;
     }
     .sliderSwitch:before {
       position: absolute;
       content: "";
-      height: 18px;
-      width: 18px;
+      height: 20px;
+      width: 20px;
       left: 3px;
       bottom: 3px;
-      background-color: #00aaff;
+      background-color: white;
       transition: 0.4s;
-      border-radius: 4px;
-      box-shadow: 0 0 5px #00aaff;
+      border-radius: 50%;
     }
     input:checked + .sliderSwitch {
-      background-color: #ddd;
+      background-color: #00aaff;
     }
     input:checked + .sliderSwitch:before {
-      transform: translateX(26px);
-      background-color: #0077cc;
-      box-shadow: 0 0 5px #0077cc;
+      transform: translateX(24px);
     }
 
     /* Color preview and layout */
@@ -349,10 +335,10 @@
     <div id="appearanceSettings">
       <strong>Appearance</strong>
       <label class="switch">
-        <input type="checkbox" id="themeSwitch" />
+        <input type="checkbox" id="themeToggle" />
         <span class="sliderSwitch"></span>
-        <span>Light Mode</span>
       </label>
+      <span id="themeLabel" style="margin-left: 10px; vertical-align: middle; user-select:none;">Dark Mode</span>
     </div>
   </div>
 
@@ -405,9 +391,9 @@
     const boxSizeInput = document.getElementById("boxSize");
     const boxSizeValSettings = document.getElementById("boxSizeValSettings");
     const defaultBoxSizeBtn = document.getElementById("defaultBoxSizeBtn");
-    const appearanceSettings = document.getElementById("appearanceSettings");
+    const themeToggle = document.getElementById("themeToggle");
+    const themeLabel = document.getElementById("themeLabel");
     const gticLogo = document.getElementById("gtic-logo");
-    const themeSwitch = document.getElementById("themeSwitch");
 
     const rInput = document.getElementById("r");
     const gInput = document.getElementById("g");
@@ -492,8 +478,16 @@
     }
 
     // Theme toggle function
-    function setTheme(theme) {
-      if (theme === "light") {
+    function setTheme(isLight) {
+      if (isLight) {
         document.body.classList.add("light");
         settingsPanel.classList.add("light");
-        settingsToggle.classList.add("
+        settingsToggle.classList.add("light");
+        themeLabel.textContent = "Light Mode";
+      } else {
+        document.body.classList.remove("light");
+        settingsPanel.classList.remove("light");
+        settingsToggle.classList.remove("light");
+        themeLabel.textContent = "Dark Mode";
+      }
+      // Update
