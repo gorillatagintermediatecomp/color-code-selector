@@ -16,7 +16,6 @@
       margin: 0;
       overflow-x: hidden;
       transition: background-color 0.4s ease, color 0.4s ease;
-      /* We'll scale this container */
     }
     body.light {
       background-color: #f5f5f5;
@@ -25,15 +24,6 @@
     h1 {
       font-size: 2em;
       margin-bottom: 20px;
-    }
-
-    /* Wrapper container to scale everything */
-    #scaleWrapper {
-      display: inline-block;
-      transform-origin: top center;
-      transition: transform 0.3s ease;
-      width: 100%;
-      max-width: 450px;
     }
 
     /* Settings menu */
@@ -65,7 +55,7 @@
       border: 2px solid #fff;
       border-radius: 8px;
       padding: 15px;
-      width: 240px;
+      width: 220px;
       box-shadow: 0 0 20px rgba(255,255,255,0.3);
       display: none;
       z-index: 999;
@@ -311,12 +301,6 @@
     </label>
     <button id="defaultBoxSizeBtn">Default</button>
 
-    <label for="uiScale">
-      UI Scale (%)
-      <input type="range" id="uiScale" min="50" max="150" value="100" />
-      <div id="uiScaleVal">100%</div>
-    </label>
-
     <div id="appearanceSettings">
       <strong>Appearance</strong>
       <label><input type="radio" name="theme" value="dark" checked /> Dark Mode</label>
@@ -324,38 +308,36 @@
     </div>
   </div>
 
-  <div id="scaleWrapper">
-    <h1>RGB Color Selector</h1>
+  <h1>RGB Color Selector</h1>
 
-    <div class="container">
-      <div id="color-preview"></div>
+  <div class="container">
+    <div id="color-preview"></div>
 
-      <div class="slider-group">
-        <label>R: 
-          <input type="range" id="r" min="0" max="9" value="0" />
-          <span class="value-box" id="rVal9">0</span> |
-          <span class="value-box" id="rVal255">0</span>
-        </label>
-      </div>
-
-      <div class="slider-group">
-        <label>G: 
-          <input type="range" id="g" min="0" max="9" value="0" />
-          <span class="value-box" id="gVal9">0</span> |
-          <span class="value-box" id="gVal255">0</span>
-        </label>
-      </div>
-
-      <div class="slider-group">
-        <label>B: 
-          <input type="range" id="b" min="0" max="9" value="0" />
-          <span class="value-box" id="bVal9">0</span> |
-          <span class="value-box" id="bVal255">0</span>
-        </label>
-      </div>
-
-      <div id="output">RGB(0, 0, 0)</div>
+    <div class="slider-group">
+      <label>R: 
+        <input type="range" id="r" min="0" max="9" value="0" />
+        <span class="value-box" id="rVal9">0</span> |
+        <span class="value-box" id="rVal255">0</span>
+      </label>
     </div>
+
+    <div class="slider-group">
+      <label>G: 
+        <input type="range" id="g" min="0" max="9" value="0" />
+        <span class="value-box" id="gVal9">0</span> |
+        <span class="value-box" id="gVal255">0</span>
+      </label>
+    </div>
+
+    <div class="slider-group">
+      <label>B: 
+        <input type="range" id="b" min="0" max="9" value="0" />
+        <span class="value-box" id="bVal9">0</span> |
+        <span class="value-box" id="bVal255">0</span>
+      </label>
+    </div>
+
+    <div id="output">RGB(0, 0, 0)</div>
   </div>
 
   <img
@@ -392,10 +374,6 @@
 
     const output = document.getElementById("output");
     const preview = document.getElementById("color-preview");
-
-    const scaleWrapper = document.getElementById("scaleWrapper");
-    const uiScaleInput = document.getElementById("uiScale");
-    const uiScaleVal = document.getElementById("uiScaleVal");
 
     // Toggle settings panel visibility
     settingsToggle.addEventListener("click", () => {
@@ -482,5 +460,26 @@
       updateSliderFill(bInput);
     }
 
-    // Update UI scale based on slider
-    function updateUIS
+    // Event listeners
+    boxSizeInput.addEventListener("input", updateBoxSize);
+    [rInput, gInput, bInput].forEach((input) => input.addEventListener("input", updateRGB));
+
+    // Appearance radio buttons listener
+    appearanceSettings.querySelectorAll('input[name="theme"]').forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        setTheme(e.target.value);
+      });
+    });
+
+    // Initialize slider fills and theme on page load
+    updateBoxSize();
+    updateRGB();
+    setTheme("dark");
+
+    // Click on logo to open Discord link
+    gticLogo.addEventListener("click", () => {
+      window.open("https://discord.gg/hB4V4ywqxj", "_blank");
+    });
+  </script>
+</body>
+</html>
