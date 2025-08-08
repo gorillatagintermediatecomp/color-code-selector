@@ -55,7 +55,7 @@
       margin-bottom: 15px;
       color: #eee;
     }
-    /* All sliders styled */
+    /* Common slider style */
     input[type="range"] {
       -webkit-appearance: none;
       width: 300px;
@@ -63,9 +63,16 @@
       border-radius: 4px;
       outline: none;
       cursor: pointer;
-      background: linear-gradient(to right, #00aaff 0%, #00aaff 50%, #444 50%, #444 100%);
+      background: linear-gradient(to right, #00aaff 0%, #00aaff 0%, #444 0%, #444 100%);
       transition: background 0.3s ease;
     }
+    /* Settings panel slider width override */
+    #settingsPanel input[type="range"] {
+      width: 100%;
+      margin-top: 8px;
+      background: linear-gradient(to right, #00aaff 0%, #00aaff 50%, #444 50%, #444 100%);
+    }
+    /* Chrome, Safari, Edge slider thumb */
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -73,12 +80,13 @@
       height: 20px;
       background: #00aaff;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 4px; /* box shape */
       border: none;
-      margin-top: -6px;
+      margin-top: -6px; /* center thumb vertically */
       transition: background 0.3s ease;
       box-shadow: 0 0 5px #00aaff;
     }
+    /* Firefox slider thumb */
     input[type="range"]::-moz-range-thumb {
       width: 20px;
       height: 20px;
@@ -89,6 +97,7 @@
       transition: background 0.3s ease;
       box-shadow: 0 0 5px #00aaff;
     }
+
     #boxSizeValSettings {
       margin-top: 5px;
       font-weight: bold;
@@ -228,22 +237,25 @@
       }
     });
 
-    // Update slider background fill for any slider input element
-    function updateSliderBackground(slider) {
-      const min = parseInt(slider.min);
-      const max = parseInt(slider.max);
-      const val = parseInt(slider.value);
-      const percent = ((val - min) / (max - min)) * 100;
-      slider.style.background = `linear-gradient(to right, #00aaff 0%, #00aaff ${percent}%, #444 ${percent}%, #444 100%)`;
-    }
-
     // Update box size from settings slider
     function updateBoxSize() {
       const size = parseInt(boxSizeInput.value);
       boxSizeValSettings.textContent = size;
       preview.style.width = size + "px";
       preview.style.height = size + "px";
-      updateSliderBackground(boxSizeInput);
+
+      // Update slider background gradient to show fill
+      const percent = ((size - 50) / (400 - 50)) * 100;
+      boxSizeInput.style.background = `linear-gradient(to right, #00aaff 0%, #00aaff ${percent}%, #444 ${percent}%, #444 100%)`;
+    }
+
+    // Update background fill for any slider with blue fill
+    function updateSliderFill(slider) {
+      const min = parseInt(slider.min);
+      const max = parseInt(slider.max);
+      const val = parseInt(slider.value);
+      const percent = ((val - min) / (max - min)) * 100;
+      slider.style.background = `linear-gradient(to right, #00aaff 0%, #00aaff ${percent}%, #444 ${percent}%, #444 100%)`;
     }
 
     // Update RGB colors and output
@@ -267,28 +279,25 @@
       preview.style.backgroundColor = `rgb(${r255}, ${g255}, ${b255})`;
 
       output.textContent = `RGB(${r255}, ${g255}, ${b255})`;
+
+      // Update slider fills
+      updateSliderFill(rInput);
+      updateSliderFill(gInput);
+      updateSliderFill(bInput);
     }
 
-    // Add event listeners and initialize slider backgrounds
+    // Event listeners
     boxSizeInput.addEventListener("input", updateBoxSize);
+    [rInput, gInput, bInput].forEach((input) => input.addEventListener("input", updateRGB));
 
-    [rInput, gInput, bInput].forEach((slider) => {
-      slider.addEventListener("input", () => {
-        updateRGB();
-        updateSliderBackground(slider);
-      });
-      // Initialize slider backgrounds on load
-      updateSliderBackground(slider);
-    });
+    // Initialize slider fills on page load
+    updateBoxSize();
+    updateRGB();
 
     // Click on logo to open Discord link
     gticLogo.addEventListener("click", () => {
       window.open("https://discord.gg/hB4V4ywqxj", "_blank");
     });
-
-    // Initialize
-    updateBoxSize();
-    updateRGB();
   </script>
 </body>
 </html>
