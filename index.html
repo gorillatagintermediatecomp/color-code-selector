@@ -46,6 +46,7 @@
     }
 
     #color-preview {
+      position: relative;
       width: 160px;
       height: 160px;
       border-radius: 10px;
@@ -53,6 +54,18 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
       margin: 0 auto 24px;
       transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 1.5em;
+      color: var(--text);
+      user-select: text;
+      text-shadow: 0 0 4px rgba(0,0,0,0.7);
+      text-align: center;
+      padding: 0 10px;
+      box-sizing: border-box;
     }
 
     /* Box size slider section */
@@ -61,6 +74,7 @@
       margin: 0 auto 30px;
       color: var(--text);
       font-weight: 600;
+      position: relative;
     }
     #boxSizeLabel {
       display: block;
@@ -101,10 +115,12 @@
       transition: background 0.3s ease;
     }
     #boxSizeValSettings {
-      text-align: right;
+      position: absolute;
+      right: 10px;
+      top: 2px;
       font-family: monospace;
-      font-weight: 600;
-      font-size: 1.1em;
+      font-weight: 700;
+      font-size: 1.2em;
       color: var(--text);
       user-select: text;
     }
@@ -260,10 +276,10 @@
 </head>
 <body>
 
-  <h1>Color Code Selector</h1>
+  <h1>RGB Color Selector with Box Size</h1>
 
   <div class="card">
-    <div id="color-preview" aria-hidden="true"></div>
+    <div id="color-preview" aria-hidden="true">RGB(0, 0, 0)</div>
 
     <div id="boxSizeContainer">
       <label id="boxSizeLabel" for="boxSize">Box Size (px)</label>
@@ -329,14 +345,14 @@
   const gVal255 = document.getElementById("gVal255");
   const bVal255 = document.getElementById("bVal255");
 
-  const preview = document.getElementById("color-preview");
+  const output = document.getElementById("color-preview");
 
   // Update box size from slider
   function updateBoxSize() {
     const size = parseInt(boxSizeInput.value);
     boxSizeValSettings.textContent = size;
-    preview.style.width = size + "px";
-    preview.style.height = size + "px";
+    output.style.width = size + "px";
+    output.style.height = size + "px";
 
     // Update slider background gradient fill
     const percent = ((size - 50) / (400 - 50)) * 100;
@@ -376,7 +392,9 @@
     gVal255.textContent = g255;
     bVal255.textContent = b255;
 
-    preview.style.backgroundColor = `rgb(${r255}, ${g255}, ${b255})`;
+    output.style.backgroundColor = `rgb(${r255}, ${g255}, ${b255})`;
+
+    output.textContent = `RGB(${r255}, ${g255}, ${b255})`;
 
     updateSliderFill(rInput);
     updateSliderFill(gInput);
