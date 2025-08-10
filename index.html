@@ -4,9 +4,28 @@
   <meta charset="UTF-8" />
   <title>Color Code Selector</title>
   <style>
-    /* ... your existing styles ... */
+    :root {
+      --bg: #0b0049;
+      --accent: #00aaff;
+      --panel: #111;
+      --text: #efefef;
+      --slider-bg-filled: var(--accent);
+      --slider-bg-empty: #444;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 24px;
+      margin: 0;
+      overflow-x: hidden;
+    }
 
-    /* Remove the outside h1 margin */
     h1 {
       margin: 0 0 14px;
       font-size: 24px;
@@ -15,20 +34,235 @@
       user-select: none;
     }
 
-    /* Optional: add some padding below the h1 inside the card */
-    .card h1 {
-      padding-bottom: 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 24px;
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.12));
+      border-radius: 12px;
+      padding: 20px 30px 40px 30px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      box-sizing: border-box;
+      user-select: none;
     }
 
+    #color-preview {
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      border: 4px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      margin: 0 auto 24px;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Box size slider section */
+    #boxSizeContainer {
+      max-width: 640px;
+      margin: 0 auto 30px;
+      color: var(--text);
+      font-weight: 600;
+    }
+    #boxSizeLabel {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1em;
+    }
+    #boxSize {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 8px;
+      border-radius: 6px;
+      background: linear-gradient(to right, var(--slider-bg-filled) 0%, var(--slider-bg-filled) 0%, var(--slider-bg-empty) 0%, var(--slider-bg-empty) 100%);
+      outline: none;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background 0.3s ease;
+    }
+    #boxSize::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(0, 170, 255, 0.6);
+      margin-top: -5px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #boxSize::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(0, 170, 255, 0.6);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #boxSizeValSettings {
+      text-align: right;
+      font-family: monospace;
+      font-weight: 600;
+      font-size: 1.1em;
+      color: var(--text);
+      user-select: text;
+    }
+    #defaultBoxSizeBtn {
+      display: block;
+      margin: 10px auto 0 auto;
+      background: var(--accent);
+      color: #001;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 6px 14px rgba(0, 170, 255, 0.12);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    #defaultBoxSizeBtn:active {
+      transform: translateY(1px);
+    }
+    #defaultBoxSizeBtn:hover {
+      background: #0088cc;
+      color: white;
+      box-shadow: 0 6px 14px rgba(0, 136, 204, 0.4);
+    }
+
+    /* Sliders container */
+    .sliders {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-width: 640px;
+      margin: 0 auto 12px;
+      user-select: none;
+    }
+
+    .slider-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slider-row label {
+      width: 60px;
+      text-align: right;
+      margin-right: 10px;
+      color: #ddd;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .slider-row .controls {
+      flex: 1;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      height: 8px;
+      border-radius: 6px;
+      background: linear-gradient(to right, var(--slider-bg-filled) 0%, var(--slider-bg-filled) 0%, var(--slider-bg-empty) 0%, var(--slider-bg-empty) 100%);
+      outline: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      flex-grow: 1;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(0, 170, 255, 0.6);
+      margin-top: -5px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(0, 170, 255, 0.6);
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .val-box {
+      width: 80px;
+      text-align: left;
+      font-family: monospace;
+      color: #fff;
+      font-weight: 600;
+      user-select: text;
+      flex-shrink: 0;
+    }
+
+    /* Footer with links */
+    footer.footer {
+      max-width: 720px;
+      margin: 36px auto 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      color: var(--text);
+      font-size: 14px;
+      user-select: none;
+    }
+    footer.footer a {
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    footer.footer a:hover {
+      text-decoration: underline;
+    }
+    footer.footer img {
+      height: 28px;
+      width: 28px;
+      border-radius: 4px;
+      object-fit: contain;
+    }
+
+    @media (max-width: 520px) {
+      .slider-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .slider-row label {
+        text-align: left;
+        width: auto;
+      }
+      .val-box {
+        width: auto;
+      }
+      footer.footer {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>Color Code Selector</h1> <!-- Moved inside the card -->
+  <h1>Color Code Selector</h1>
 
+  <div class="card">
     <div id="color-preview" aria-hidden="true"></div>
 
     <div id="boxSizeContainer">
@@ -66,7 +300,6 @@
 
   </div>
 
-  <!-- footer unchanged -->
   <footer class="footer" aria-label="credits">
     <a href="https://discord.com/users/1252981295454224390" target="_blank" rel="noopener noreferrer" title="Made by katislunatic">
       Made by <strong>katislunatic</strong>
@@ -80,7 +313,82 @@
   </footer>
 
 <script>
-  // your existing JavaScript unchanged
+  const boxSizeInput = document.getElementById("boxSize");
+  const boxSizeValSettings = document.getElementById("boxSizeValSettings");
+  const defaultBoxSizeBtn = document.getElementById("defaultBoxSizeBtn");
+
+  const rInput = document.getElementById("r");
+  const gInput = document.getElementById("g");
+  const bInput = document.getElementById("b");
+
+  const rVal9 = document.getElementById("rVal9");
+  const gVal9 = document.getElementById("gVal9");
+  const bVal9 = document.getElementById("bVal9");
+
+  const rVal255 = document.getElementById("rVal255");
+  const gVal255 = document.getElementById("gVal255");
+  const bVal255 = document.getElementById("bVal255");
+
+  const preview = document.getElementById("color-preview");
+
+  // Update box size from slider
+  function updateBoxSize() {
+    const size = parseInt(boxSizeInput.value);
+    boxSizeValSettings.textContent = size;
+    preview.style.width = size + "px";
+    preview.style.height = size + "px";
+
+    // Update slider background gradient fill
+    const percent = ((size - 50) / (400 - 50)) * 100;
+    boxSizeInput.style.background = linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, var(--slider-bg-empty) ${percent}%, var(--slider-bg-empty) 100%);
+  }
+
+  // Reset box size to default 200
+  defaultBoxSizeBtn.addEventListener("click", () => {
+    boxSizeInput.value = 200;
+    updateBoxSize();
+  });
+
+  // Update slider fill background for any slider
+  function updateSliderFill(slider) {
+    const min = parseInt(slider.min);
+    const max = parseInt(slider.max);
+    const val = parseInt(slider.value);
+    const percent = ((val - min) / (max - min)) * 100;
+    slider.style.background = linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, var(--slider-bg-empty) ${percent}%, var(--slider-bg-empty) 100%);
+  }
+
+  // Update RGB values and preview
+  function updateRGB() {
+    const r = parseInt(rInput.value);
+    const g = parseInt(gInput.value);
+    const b = parseInt(bInput.value);
+
+    const r255 = Math.round((r / 9) * 255);
+    const g255 = Math.round((g / 9) * 255);
+    const b255 = Math.round((b / 9) * 255);
+
+    rVal9.textContent = r;
+    gVal9.textContent = g;
+    bVal9.textContent = b;
+
+    rVal255.textContent = r255;
+    gVal255.textContent = g255;
+    bVal255.textContent = b255;
+
+    preview.style.backgroundColor = rgb(${r255}, ${g255}, ${b255});
+
+    updateSliderFill(rInput);
+    updateSliderFill(gInput);
+    updateSliderFill(bInput);
+  }
+
+  boxSizeInput.addEventListener("input", updateBoxSize);
+  [rInput, gInput, bInput].forEach((input) => input.addEventListener("input", updateRGB));
+
+  // Initial update
+  updateBoxSize();
+  updateRGB();
 </script>
 </body>
 </html>
