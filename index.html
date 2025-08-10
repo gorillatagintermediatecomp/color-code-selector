@@ -260,7 +260,7 @@
 </head>
 <body>
 
-  <h1>Color Code Selector</h1>
+  <h1>RGB Color Selector with Box Size</h1>
 
   <div class="card">
     <div id="color-preview" aria-hidden="true"></div>
@@ -340,7 +340,7 @@
 
     // Update slider background gradient fill
     const percent = ((size - 50) / (400 - 50)) * 100;
-    boxSizeInput.style.background = linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, var(--slider-bg-empty) ${percent}%, var(--slider-bg-empty) 100%);
+    boxSizeInput.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, var(--slider-bg-empty) ${percent}%, var(--slider-bg-empty) 100%)`;
   }
 
   // Reset box size to default 200
@@ -355,7 +355,7 @@
     const max = parseInt(slider.max);
     const val = parseInt(slider.value);
     const percent = ((val - min) / (max - min)) * 100;
-    slider.style.background = linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, var(--slider-bg-empty) ${percent}%, var(--slider-bg-empty) 100%);
+    slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, var(--slider-bg-empty) ${percent}%, var(--slider-bg-empty) 100%)`;
   }
 
   // Update RGB values and preview
@@ -376,7 +376,7 @@
     gVal255.textContent = g255;
     bVal255.textContent = b255;
 
-    preview.style.backgroundColor = rgb(${r255}, ${g255}, ${b255});
+    preview.style.backgroundColor = `rgb(${r255}, ${g255}, ${b255})`;
 
     updateSliderFill(rInput);
     updateSliderFill(gInput);
