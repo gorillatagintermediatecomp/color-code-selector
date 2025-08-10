@@ -45,16 +45,6 @@
       user-select: none;
     }
 
-    /* New label styling for color code text */
-    #colorCodeLabel {
-      color: var(--text);
-      text-align: center;
-      user-select: none;
-      margin-bottom: 8px;
-      font-weight: 600;
-      font-size: 18px;
-    }
-
     #color-preview {
       width: 160px;
       height: 160px;
@@ -270,11 +260,10 @@
 </head>
 <body>
 
-  <h1>RGB Color Selector with Box Size</h1>
+  <h1>Color Code Selector</h1>
 
   <div class="card">
-    <h2 id="colorCodeLabel">RGB Color Code and Box</h2>
-    <div id="color-preview" aria-labelledby="colorCodeLabel" aria-live="polite" aria-atomic="true"></div>
+    <div id="color-preview" aria-hidden="true"></div>
 
     <div id="boxSizeContainer">
       <label id="boxSizeLabel" for="boxSize">Box Size (px)</label>
@@ -308,6 +297,7 @@
         </div>
       </div>
     </div>
+
   </div>
 
   <footer class="footer" aria-label="credits">
