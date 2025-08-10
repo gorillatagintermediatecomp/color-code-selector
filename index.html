@@ -207,21 +207,6 @@
       flex-shrink: 0;
     }
 
-    #output {
-      max-width: 640px;
-      margin: 24px auto 0 auto;
-      font-size: 1.5em;
-      font-weight: 700;
-      background: var(--panel);
-      padding: 14px 16px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.02);
-      font-family: monospace;
-      user-select: text;
-      color: var(--text);
-    }
-
     /* Footer with links */
     footer.footer {
       max-width: 720px;
@@ -275,7 +260,7 @@
 </head>
 <body>
 
-  <h1>RGB Color Selector with Box Size</h1>
+  <h1>Color Code Selector</h1>
 
   <div class="card">
     <div id="color-preview" aria-hidden="true"></div>
@@ -313,7 +298,6 @@
       </div>
     </div>
 
-    <div id="output">RGB(0, 0, 0)</div>
   </div>
 
   <footer class="footer" aria-label="credits">
@@ -345,7 +329,6 @@
   const gVal255 = document.getElementById("gVal255");
   const bVal255 = document.getElementById("bVal255");
 
-  const output = document.getElementById("output");
   const preview = document.getElementById("color-preview");
 
   // Update box size from slider
@@ -394,8 +377,6 @@
     bVal255.textContent = b255;
 
     preview.style.backgroundColor = `rgb(${r255}, ${g255}, ${b255})`;
-
-    output.textContent = `RGB(${r255}, ${g255}, ${b255})`;
 
     updateSliderFill(rInput);
     updateSliderFill(gInput);
